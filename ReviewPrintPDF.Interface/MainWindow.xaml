@@ -1,0 +1,69 @@
+﻿<Window x:Class="ReviewPrintPDF.Interface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:converters="clr-namespace:ReviewPrintPDF.Interface.Converters"
+        Title="ReviewPrintPDF"
+        Height="500"
+        Width="500">
+    
+  <Window.Resources>
+		<converters:CountToBoolConverter
+			x:Key="CountToBool" />
+		<converters:IndexToBoolConverter
+			x:Key="IndexToBool" />
+		<Style
+			TargetType="Button">
+			<Setter 
+				Property="Margin" 
+				Value="5,2,0,2" />
+			<Setter
+				Property="Width"
+				Value="75" />
+		</Style>
+	</Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+      <Grid.RowDefinitions>
+				<RowDefinition Height="auto" />
+        <RowDefinition />
+				<RowDefinition Height="auto" />
+			</Grid.RowDefinitions>
+      <Menu
+          Grid.Row="0">
+          <MenuItem
+              Header="File">
+              <MenuItem
+                Header="Open Files" 
+								Command="{Binding OpenFiles}"/>
+              <MenuItem
+                Header="Print" 
+								IsEnabled="{Binding Filenames.Count, Converter={StaticResource CountToBool}}"
+								Command="{Binding Print}"/>
+              <MenuItem
+                Header="Close" 
+								Command="{Binding Close}"/>
+          </MenuItem>
+      </Menu>
+    <ListBox 
+      Grid.Row="1" 
+			ItemsSource="{Binding Filenames}"
+			SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+			IsSynchronizedWithCurrentItem="True" />
+		<StackPanel
+			Grid.Row="2"
+			Orientation="Horizontal">
+			<Button 
+				Content="Up" 
+				IsEnabled="{Binding SelectedIndex, Converter={StaticResource IndexToBool}}"
+				Command="{Binding MoveUp}" />
+			<Button 
+				Content="Down"
+				IsEnabled="{Binding SelectedIndex, Converter={StaticResource IndexToBool}}"
+				Command="{Binding MoveDown}" />
+			<Button
+				Content="Delete" 
+				IsEnabled="{Binding SelectedIndex, Converter={StaticResource IndexToBool}}"
+				Command="{Binding Delete}" />
+		</StackPanel>
+	</Grid>
+</Window>
